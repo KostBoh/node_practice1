@@ -1,8 +1,8 @@
 [
-    {
-        "id":1,
-        "name": "glasses",
-        "price":100,
-        "discount":0
-    }
+  {
+    "id": "1",
+    "name": "p1",
+    "price": 150,
+    "discount": 1
+  }
 ]
