@@ -1,39 +1,18 @@
 import { nanoid } from "nanoid";
 import fs from "node:fs/promises";
 import path from "node:path";
+import Product from "../db/models/Product.js";
 
 const productsPath = path.resolve("db", "products.json");
 
 const updateProducts = (products) =>
   fs.writeFile(productsPath, JSON.stringify(products, null, 2));
 
-export const getProducts = async () => {
-  const data = await fs.readFile(productsPath, "utf-8");
-  return JSON.parse(data);
+export const getProducts = () => {
+  return Product.findAll();
 };
 
-/* export const getMovieById = async (id) => {
-  const movies = await getMovies();
-  const result = movies.find((item) => item.id === id);
-
-  return result || null;
-}; */
-
-export const addProduct = async (data) => {
-  const products = await getProducts();
-
-  const newProduct = {
-    id: nanoid(),
-    ...data,
-    discount: 0,
-  };
-
-  products.push(newProduct);
-
-  await updateProducts(products);
-
-  return newProduct;
-};
+export const addProduct = (data) => Product.create(data);
 
 export const updateById = async (id, data) => {
   const products = await getProducts();
