@@ -1,3 +1,4 @@
+import { response } from "express";
 import { createError } from "../helpers/createError.js";
 import * as s from "../services/productsServices.js";
 
@@ -5,6 +6,15 @@ export const getProducts = async (req, res, next) => {
   try {
     const products = await s.getProducts();
     res.json(products);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateProductImages = async (req, res, next) => {
+  try {
+    res.json(req.files);
+    // const productImages = await s.updateById(req.params.id, req.files);
   } catch (error) {
     next(error);
   }

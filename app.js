@@ -5,7 +5,7 @@ import productsRouter from "./routes/productsRouter.js";
 import sequelize from "./db/sequelize.js";
 
 const app = express();
-const port = 4040;
+const port = 3000;
 
 app.use(express.json());
 app.use(morgan("tiny"));
