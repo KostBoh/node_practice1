@@ -1,6 +1,8 @@
-import { response } from "express";
+import { log } from "console";
 import { createError } from "../helpers/createError.js";
 import * as s from "../services/productsServices.js";
+import fs from "fs/promises";
+import path from "path";
 
 export const getProducts = async (req, res, next) => {
   try {
@@ -11,10 +13,23 @@ export const getProducts = async (req, res, next) => {
   }
 };
 
+const getProductImagesPath = (filename) =>
+  path.resolve("public", "products", filename);
+
 export const updateProductImages = async (req, res, next) => {
   try {
-    res.json(req.files);
-    // const productImages = await s.updateById(req.params.id, req.files);
+    const promisesArr = req.files.map(async (file) => {
+      const oldPath = file.path;
+      const newPath = getProductImagesPath(file.filename);
+      await fs.rename(oldPath, newPath);
+      return path.join("products", file.filename);
+    });
+    const result = await Promise.allSettled(promisesArr);
+    const data = result.map(({ value }) => value);
+    // const productImages = await s.updateById(req.params.id, { images: data });
+    // res.json(productImages);
+
+    res.json(data);
   } catch (error) {
     next(error);
   }
